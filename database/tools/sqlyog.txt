@@ -1,0 +1,2 @@
+CTRL + SHIFT + C 注释
+CTRL + SHIFT + R 取消注释
