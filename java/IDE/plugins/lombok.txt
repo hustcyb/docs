@@ -1,0 +1,5 @@
+解决lombok自动生成Getter和Setter方法在Eclipse下报错的问题
+1. 双击lombok.jar
+2. 在IDEs列表中选择Eclipse，如果列表中没有Eclipse，点击“Specify location...”，选择Eclipse的安装位置
+3. 点击“Install/Update”安装插件
+4. 启动Eclipse

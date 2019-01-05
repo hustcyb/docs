@@ -1,0 +1,24 @@
+1. 调试时禁止切换至debug视图
+Window -> Preferences -> Run/Debug -> Perspectives
+Open the associated prespective when launching: Never
+Open the associated perspective when an application suspends: Never
+
+2. 设置字符集为UTF-8
+a. 修改工作空间的字符编码
+Windows -> Preferences -> General -> Workspace -> Text file encoding，选择UTF-8
+b. 修改单个文件的字符编码
+选择文件 -> 右键 -> Properties -> Resource -> Text file encoding，选择UTF-8
+c. 修改指定文件类型的字符编码
+Windows -> Preferences -> General -> Content Types，选择对应的文件类型，Default encoding输入UTF-8
+
+3. 中文字体设置
+Windows -> Preferences -> General -> Appearance -> Colors and Fonts -> Basic -> 双击Text Font，选择Courier New
+字体列表中可能没有Courier New，点击“加载显示字体”, 在字段列表窗口，选中“Courier New”，右键 -> “显示”
+
+4. Console取消字符数限制
+Windows -> Preferences -> RUN/DEBUG -> Console, 取消勾选 Limit console output
+Console设置自动换行
+Windows -> Preferences -> RUN/DEBUG -> Console，勾选"Fixed width console"，设置“Maximium character width”为80（或120、160)
+
+5. 自下载jar包源代码
+Windows -> Preferences -> Maven，勾选“Download Artifact Sources”和“Download Artifact JavaDoc”

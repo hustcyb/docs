@@ -1,0 +1,17 @@
+数据库密码加密
+1. 进行druid目录（D:\maven\repo\com\alibaba\druid\1.0.6），打开命令行，运行命令
+java -cp druid-1.0.6.jar com.alibaba.druid.filter.config.ConfigTools 数据库密码
+注意druid不同版本加密的密文是不一样的，低版本直接生成密文，高版本则生成公钥和私钥
+2. 配置数据库密码加密
+低版本druid数据库密码加密配置
+<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+	<property name="filters" value="config" />
+	<property name="connectProperties" value="config.decrypt=true" />
+	<property name="password" value="UpNXGzouVm+XXcN25ltLAysEd1/d83SylhNeMtmdfuapHTK5F88R2uxwi4uFbehplHShyzuaLgW5Pog8+q93Kw==" />
+</bean>
+高版本体公钥私钥加密配置
+<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+	<property name="filters" value="config" />
+	<property name="connectProperties" value="config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIHopiQ0XJPOA2Z1pbfWxQIO0MGQfZPauUdkCHqObzT18PYgby7IjFJSkSxcASox9+iPssDAG4hWii/sV09Ebn0CAwEAAQ==" />
+	<property name="password" value="CjfgOaDkmlbmy3x5EiXrYKNS/uSsGdxwy9LTlsZpDegy8m40wEYfx9yRPJTb3pin93RElnKzSdN+FZm3KT6L2w==" />
+</bean>

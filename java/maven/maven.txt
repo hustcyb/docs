@@ -1,0 +1,8 @@
+新建项目报“Cannot read lifecycle mapping metadata for artifact...”的解决办法
+Window -> Preferences, Maven -> User Settings -> Global Settings, 选择maven安全目录下的settings.xml(我本机的目录为D:\Program Files\apache-maven-3.3.3\conf\settings.xml)
+
+修改版本号
+mvn versions:set -DnewVersion=2.0.0.Alpha4
+
+只构建部分项目
+mvn package -pl erui-common,erui-cas

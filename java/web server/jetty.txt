@@ -1,0 +1,2 @@
+将启动日志写入到日志文件
+java -jar start.jar 2>error.log 1>stdout.log
