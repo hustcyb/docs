@@ -1,0 +1,5 @@
+zookeeper连接测试
+1. 运行zookeeper镜像，获取bash
+docker run -it --rm zookeeper bash
+2. 运行zookeeper客户端zkCli.sh
+zkCli.sh -server 127.0.0.1:2181
