@@ -6,3 +6,7 @@ mvn versions:set -DnewVersion=2.0.0.Alpha4
 
 只构建部分项目
 mvn package -pl erui-common,erui-cas
+
+skipTests与maven.test.skip区别
+-DskipTests 不执行测试用例，但编译测试用例类生成相应的class文件至target/test-classes下
+-Dmaven.test.skip=true，不执行测试用例，也不编译测试用例类
