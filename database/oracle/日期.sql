@@ -1,0 +1,2 @@
+-- 查询当前系统时间
+SELECT SYSDATE FROM DUAL;

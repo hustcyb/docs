@@ -1,5 +1,47 @@
-zookeeper连接测试
-1. 运行zookeeper镜像，获取bash
-docker run -it --rm zookeeper bash
-2. 运行zookeeper客户端zkCli.sh
-zkCli.sh -server 127.0.0.1:2181
+下载镜像
+docker pull zookeeper
+
+启动zookeeper
+docker run --name zk --restart always -d zookeeper
+
+从其他容器链接zookeeper
+docker run --name some-app --link zk:zk -d application-that-uses-zookeeper
+
+通过命令行连接工具连接zookeeper
+docker run -it --rm --link zk:zk zookeeper zkCli.sh -server zk
+
+通过docker stack deploy或者docker-compose方式启动
+version: '3.1'
+
+version: '3.1'
+
+services:
+  zoo1:
+    image: zookeeper
+    restart: always
+    hostname: zoo1
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+
+  zoo2:
+    image: zookeeper
+    restart: always
+    hostname: zoo2
+    ports:
+      - 2182:2181
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zoo3:2888:3888
+
+  zoo3:
+    image: zookeeper
+    restart: always
+    hostname: zoo3
+    ports:
+      - 2183:2181
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=0.0.0.0:2888:3888

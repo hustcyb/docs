@@ -1,0 +1,6 @@
+安装
+1. CTRL + SHIFT + P，选择"Package Control: Install Package"(输入“pcip”可快速定位)，回车，打开Package Control
+2. 输入"SqlBeautifier"，回车进行安装
+
+SQL格式化
+CTRL + K, CTRL + F

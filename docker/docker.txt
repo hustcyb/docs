@@ -1,0 +1,5 @@
+保存镜像
+docker save zookeeper -o zookeeper.tar
+
+加载镜像
+docker load < zookeeper.tar
