@@ -13,8 +13,6 @@ docker run -it --rm --link zk:zk zookeeper zkCli.sh -server zk
 通过docker stack deploy或者docker-compose方式启动
 version: '3.1'
 
-version: '3.1'
-
 services:
   zoo1:
     image: zookeeper
