@@ -1,0 +1,11 @@
+cat写入文件
+
+覆盖
+cat << EOF > test.txt
+或
+cat > test.txt << EOF
+
+追加
+cat << EOF >> test.txt
+或
+cat >> test.txt << EOF

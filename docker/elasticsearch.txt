@@ -1,0 +1,37 @@
+下载镜像
+docker pull docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+
+运行
+docker run -d --name es -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+
+测试：
+浏览器访问http://x.x.x.x:9200，其中x.x.x.x为服务器的ip
+返回如下信息启动成功
+{
+  "name" : "QCfmpi2",
+  "cluster_name" : "elasticsearch",
+  "cluster_uuid" : "TXkNoQv4TWCUq_zxExKVqg",
+  "version" : {
+    "number" : "5.6.12",
+    "build_hash" : "cfe3d9f",
+    "build_date" : "2018-09-10T20:12:43.732Z",
+    "build_snapshot" : false,
+    "lucene_version" : "6.6.1"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+elasticsearch管理端
+下载镜像
+docker pull mobz/elasticsearch-head:5
+
+运行容器
+docker run -d --name es_admin -p 9100:9100 mobz/elasticsearch-head:5
+
+测试：
+浏览器访问http://x.x.x.x:9100，其中x.x.x.x为服务器ip
+
+修正操作时报“Content-Type header [application/x-www-form-urlencoded] is not supported”的问题
+docker exec -it es_admin bash
+sed -i 's/application\/x-www-form-urlencoded/application\/json;charset=UTF-8/g' _site/vendor.js 
+docker restart es_admin
