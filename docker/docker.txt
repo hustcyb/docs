@@ -1,5 +1,335 @@
+1. yum -y install lvm2（修正安装docker时报Transaction check error的bug)
+2. yum -y install docker-io
+3. systemctl start docker
+4. systemctl enable docker
+
+
+1. yum -y install lvm2
+2. curl -fsSL https://get.docker.com | sh
+
+docker命令需要root权限，可运行su命令切换至root，或sudo + docker命令
+
+检查docker是否安装正确
+sudo docker info
+或
+sudo docker version
+
+下载镜像
+sudo docker pull busybox
+
+运行Hello World
+sudo docker run busybox /bin/echo Hello Docker
+
+以后台进行方式运行
+sample_job=$(docker run -d busybox /bin/sh -c "while true; do echo Docker; sleep 1; done")
+
+查看job当前状态
+sudo docker logs $sample_job
+-f 类似于linux中的tail -f命令，实时刷新日志
+
+sudo docker top nginx
+查看容器中运行的进程
+
+停止任务执行
+sudo docker stop $sample_job
+
+重启任务
+sudo docker restart $sample_job
+-i 启动一个容器并进行交互模式
+-t 10  设置超时时间为10秒，超时后系统将杀死进程
+
+启动已停止任务
+sudo docker start $sample_job
+
+移除容器
+sudo docker rm -f $sample_job
+如果容器正在运行，需加上-f参数
+-f 不管容器是否正在运行，强制退出
+
+将容器状态保存镜像
+sudo docker commit $sample_job job1
+
+列出你的镜像
+sudo docker images
+
+在docker registery中查找镜像
+sudo docker search busybox
+
+查看镜像历史版本
+sudo docker history busybox
+
+运行容器
+sudo docker run --rm -ti busybox /bin/sh
+--rm 一旦运行的进程退出就删除容器
+-ti 分配一个伪终端并进入交互模式
+busybox 容器名称
+/bin/sh 要运行的命令
+
+后台运行容器
+sudo docker run -d busybox ping 8.8.8.8
+91ce2902ce7b10617108e72849e0115786172247c27f41401979a5339ed18d18
+输出分配的ID
+
+检查容器是否运行
+sudo docker ps
+-l 显示最新创建的容器
+-a 显示所有容器
+
+Dockerfile语法格式
+INSTRUCTION argument
+所有Dockerfile须以FROM开始
+
+FROM <<image name>>
+指定基于哪下基础镜像创建
+
+MAINTAINER <<author name>>
+镜像作者
+
+RUN <<command>>
+在Shell或exec环境执行命令
+
+ADD <<src>>	<<destination>>
+复制文件
+src - URL或启动配置上下文中的文件
+destionation - 容器内的路径
+
+COPY <<src>> <<destination>>
+复制文件，与ADD区别：ADD可下载URL和解压，参考 http://blog.163.com/digoal@126/blog/static/163877040201410341236664/
+
+CMD命令
+提供容器默认的执行命令
+Dockerfile只允许一次CMD指令，使用多个CMD时，只有最后一个指令生效
+CMD有三种形式
+CMD ["executable", "param1", "param2"]   # 使用exec执行，推荐方式
+CMD ["param1", "param2"]	# 提供给ENTRYPOINT的默认参数
+CMD command param1 param2	# 在bash中执行，提供给交互应用
+
+EXPOSE
+指定容器运行时监听的端口
+EXPOSE <<port>>
+
+ENTRYPOINT
+配置可执行命令，设置默认应用程序
+Docker只允许一个ENTRYPOINT,多个ENTRYPOINT时，只执行最后一个ENTRYPOINT指令
+ENTRYPOINT ['executable', 'param1', 'param2']
+ENTRYPOINT command param1 param2
+
+WORKDIR
+指定RUN、CMD与ENTRYPOINT命令的工程目录
+WORKDIR /path/to/workdir
+
+ENV
+设置环境变量
+ENV <<KEY>> <<value>>
+
+USER
+设置镜像运行的UID
+USER <<uid>>
+
+VOLUME
+授权访问主机上的目录
+VOLUME ['/data']
+
+ARG
+定义变量，格式
+ARG <name>[=<default value>]
+如
+ARG NAME
+ENV USER $NAME
+生成镜像时设置变量值
+docker build --build-arg NAME=cyb Dockerfile
+
+sudo docker build [options] PATH | URL
+构建镜像
+options包含如下选项
+--rm 构建成功后，移除所有中间件容器
+--no-cache=false 构建过程中不使用容器
+-t 指定镜像的标签
+
+sudo docker attach ee0dcdc4bebd
+附加到运行中的容器，观察进程运行状态，可通过如下两种方式退出
+CTRL + C 直接退出
+CTRL + \ 退出并打印堆栈信息
+退出后容器也会退出
+
+sudo docker exec -it $sample_job /bin/sh
+附件到运行中的容器，并获取命令行终端，退出后容器不会退出
+
+sudo docker diff $sample_job
+列出容器中变化的文件和目录，
+A - add（添加）
+D- delete（删除）
+C- change（修改）
+
+sudo docker export $sample_job > job1.tar
+导出容器快照至本地文件
+
+sudo docker import job1.tar busybox
+导入容器快照文件至镜像
+
+sudo docker inspect --format='{{.NetworkSettings.IPAddress}}' $sample_job
+收集容器和镜像的底层信息
+
+sudo docker kill 8f507083fa12
+发送SIGKILL信号来停止容器主进程
+-s "KILL" 自定义发送到容器的信息
+
+sudo docker rmi -f 81859c23128b
+移除镜像
+-f 强制移除镜像，即使其正被使用
+-l 移除容器的网络连接，而非容器本身
+-v 移除与容器关联的空间
+
+sudo docker run -v /home/cyb:/mnt:ro --privileged busybox /bin/sh /mnt/hello.sh
+挂载宿主机的/home/cyb目录至镜像的/mnt目录，ro表示权限为只读(read only)，并运行挂载目录下的hello.sh
+--privileged 使用此参数，container内的root拥有真正的root权限，否则container内的root只是外部的一个普通用户权限
+
+sudo docker run -v `pwd`/logs:/var/log/nginx --privileged nginx
+或
+sudo docker run -v $(pwd)/logs:/var/log/nginx --privileged nginx
+`pwd` 指当前目录
+
+sudo docker run -d --name=demo busybox /bin/sh -c "while true; do echo Docker; sleep 5; done"
+--name 指定容器名称，可在需要使用容器标识的地方使用容器名称，比如 sudo docker stop demo
+
+sudo docker run -d -P --name=nginx nginx
+-P 在宿主机中随机分配一个未被占用的端口绑定到容器（对nginx镜像而言，为80和443端口），可用sudo docker port nginx查看分配的商品
+
+sudo docker port nginx 80
+查看nginx容器的80商品映射到宿主机哪个端口
+
+sudo docker run -d -p 80:80 -v /etc/nginx -v /usr/share/nginx/html --name nginx nginx
+-p 指定要映射的端口，支付如下格式：
+ip:hostPort:containerPort | ip:containerPort | hostPort:containerPort
+可使用多个-p参数来绑定多个端口
+共享/etc/nginx和/usr/share/nginx/html目录作为volume，可运行其他的容器通过--volumes-from nginx挂载volume
+
+sudo docker run -it --volumes-from nginx-image --name busybox busybox /bin/sh
+运行busybox镜像，并挂载nginx-image镜像的volume
+
+sudo docker kill -s HUP nginx
+重新加载nginx配置
+
+sudo docker restart nginx
+重启nginx
+
+sudo docker inspect --format {{.State.Pid}} nginx-image
+查看nginx容器的进程Pid
+
+sudo docker tag 7df61649c81c centos
+指定镜像的标签，用于处理docker import导入的镜像没有标签名
+
 保存镜像
 docker save zookeeper -o zookeeper.tar
 
 加载镜像
+sudo docker load --input zookeeper.tar
+或者
 docker load < zookeeper.tar
+
+sudo docker run --rm -it --link nginx:ng centos /bin/bash
+--link 会在源和接收窗口之间创建一个隧道，接收容器可以看到源容器指定信息，参数格式
+--link name:alias
+name 要链接的容器名称
+alias 这个链接的别名
+通过env命令可以查看nginx容器的环境变更
+cat /etc/hosts 可以ng的hosts配置
+ping ng 查看链接
+
+搭建私有docker registry服务器
+sudo yum -y install gcc python-devel xz-devel python-pip swig? openssl? openssl-devel?
+sudo pip install docker-registry
+
+
+docker toolbox
+启动默认主机
+docker-machine start default
+停止默认主机
+docker-machine stop default
+删除默认主机
+docker-machine rm default
+创建主机
+docker-machine create --driver virtualbox default
+查询所有主机状态
+docker-machine ls
+导入镜像
+cat /d/Software/centos-7-x86_64.tar.gz | docker import - centos
+
+安装docker-compose 
+sudo pip install -U docker-compose
+
+docker-compose up 构建，（重新）创建，启动，链接一个服务相关的容器，退出时，所有的容器者会停止
+docker-compose up -d 在后台启动并创建所有的容器
+docker-compose up -d --force-recreate 强制重新创建容器，修改了docker-compose配置文件后，可加--force-recreate参数强制重新创建容器
+docker-compose up -d --scale redis-slave=2  动态拓容redis-slave服务，启动两个容器运行redis-slave服务，注意通过--scale动态扩容的服务，不能指定container_name，否则会报container_name冲突
+docker-compose up --no-create 启动已停止的容器，而不是重新创建他们
+docker-compose stop 停止正在运行容器
+docker-compose start 启动一个已存在的服务容器
+
+docker-compose rm
+移除所有停止的容器
+docker-compose rm -f 强制移除所有的容器
+docker-compose build 重新构建compose中镜像
+docker-compose config 校验和查看（打印）compose文件
+
+docker-compose down	停止并移除容器、网络、镜像和数据卷
+docker-compose down --remove-orphans 删除未在docker compose配置文件中定义的容器服务
+
+docker-compose exec 在运行的容器中执行命令
+docker-compose exec --index=1 redis-slave redis-cli 通过docker-compose up -d --scale 启动多个容器时，可以通过--index参数指定在哪个容器中执行命令，注意index从1开始编号
+
+docker-compose images 打印镜像列表
+docker-compose kill 终止服务
+
+docker-compose logs 
+查看容器日志，如
+docker-compose logs proxy
+
+docker-compose pause
+暂停容器，如
+docker-compose pause proxy
+
+docker-compose unpause
+取消暂停容器，如
+docker-compose unpause proxy
+
+docker-compose port
+查看绑定的对外的端口，如
+docker-compose port proxy 80
+
+docker-compose ps
+打印容器的信息，如
+docker-compose ps proxy
+
+
+更新yml后重新加载配置，可通过如下两种方式实现
+1. 	docker-compose down
+	docker-compose up -d
+2. docker-compose up -d --force-recreate
+
+
+ssh连接docker machine(Docker toolbox)
+Host: 192.168.99.100
+User: docker
+Password: tcuser
+
+从容器复制文件到主机
+docker cp nginx:/usr/share/nginx/html html
+
+从主机复制文件到容器
+docker cp index.html /usr/share/nginx/html/index.html
+
+移除所有运行中和已停止的容器
+docker rm -f $(docker ps -aq)
+
+删除所有坏的<none>:<none>镜像
+docker rmi -f $(docker images -f "dangling=true" -q)
+
+docker-compose文件
+expose
+开启端口，但是不对宿主开放，即开启的端口只能通过链接服务访问，如：
+expose:
+	- "80"
+
+处理mysql镜像时区不正确的问题
+docker run -d -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=jumi18.com -e TZ=Asia/Shanghai mysql
