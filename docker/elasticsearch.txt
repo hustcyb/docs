@@ -35,3 +35,12 @@ docker run -d --name es_admin -p 9100:9100 mobz/elasticsearch-head:5
 docker exec -it es_admin bash
 sed -i 's/application\/x-www-form-urlencoded/application\/json;charset=UTF-8/g' _site/vendor.js 
 docker restart es_admin
+
+
+设置max_map_count
+sysctl -w vm.max_map_count=262144
+如果希望永久生效,可直接修改/etc/sysctl.conf
+vi /etc/sysctl.conf
+vm.max_map_count=262144
+验证max_map_count配置
+sysctl vm.max_map_count
