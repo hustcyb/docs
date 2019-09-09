@@ -115,7 +115,7 @@ ENTRYPOINT ['executable', 'param1', 'param2']
 ENTRYPOINT command param1 param2
 
 WORKDIR
-指定RUN、CMD与ENTRYPOINT命令的工程目录
+指定RUN、CMD与ENTRYPOINT命令的工作目录
 WORKDIR /path/to/workdir
 
 ENV

@@ -4,7 +4,11 @@ Window -> Preferences, Maven -> User Settings -> Global Settings, 选择maven安
 修改版本号
 mvn versions:set -DnewVersion=2.0.0.Alpha4
 
-只构建部分项目
+只构建部分模块
 mvn package -pl erui-common,erui-cas
 
-根据
+构建部分模块及模块所依赖的模块
+mvn package -pl bdus-dis-client
+
+模板工程安装到本地仓库，并更新本地catalog
+mvn clean install archetype:update-local-catalog
