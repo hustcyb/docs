@@ -1,0 +1,7 @@
+只复制目录，不复制目录下的文件
+find V1.4.SP1 -type d | sed 's/V1.4.SP1/mkdir -p V1.4.SP2/' | sh
+
+根据修改时间查询文件
+find . -mtime -60
+-n n天以内
++n n天以前

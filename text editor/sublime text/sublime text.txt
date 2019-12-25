@@ -1,2 +1,6 @@
 1. 删除重复行
 Edit -> Permute Lines -> Unique
+
+2. 跳至指定列
+CTRL + P，然后输入
+:{行号}:{列号}

@@ -8,7 +8,19 @@ mvn versions:set -DnewVersion=2.0.0.Alpha4
 mvn package -pl erui-common,erui-cas
 
 构建部分模块及模块所依赖的模块
-mvn package -pl bdus-dis-client
+mvn package -pl bdus-dis-client -am
 
 模板工程安装到本地仓库，并更新本地catalog
 mvn clean install archetype:update-local-catalog
+
+maven添加本地jar包依赖
+<dependency>
+	<groupId>swift-java-sdk</groupId>
+	<artifactId>swift-java-api</artifactId>
+	<version>1.6.4</version>
+	<scope>system</scope>
+	<systemPath>${project.basedir}/libs/swiftjavaapi.jar</systemPath>
+</dependency>
+
+指定pom文件打包
+mvn package -f cyb-archetype-demo/pom.xml

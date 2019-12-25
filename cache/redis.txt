@@ -1,0 +1,5 @@
+清空当前数据库缓存
+flushdb
+
+清空redis节点缓存
+flushall

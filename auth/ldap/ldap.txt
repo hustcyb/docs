@@ -1,0 +1,7 @@
+centos安装ldapsearch工具
+yum install openldap-clients
+
+使用
+ldapsearch -h 10.202.35.32 -p 389 -D "Admin.ouych" -w pass@word1 -b "CN=TANG Chung Fai (Stanley)(DSC00432),OU=UUPM,OU=SF-Express,DC=sfuat,DC=com"
+或
+ldapsearch -H "ldap://10.202.35.32:389" -D "Admin.ouych" -w pass@word1 -b "CN=TANG Chung Fai (Stanley)(DSC00432),OU=UUPM,OU=SF-Express,DC=sfuat,DC=com"

@@ -1,0 +1,1 @@
+SHOW FULL COLUMNS FROM distribution_log;

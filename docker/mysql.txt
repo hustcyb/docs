@@ -1,0 +1,55 @@
+运行MySQL实例
+docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=admin123 -d mysql:tag
+
+通过MySQL命令行连接MySQL实例
+docker run -ti --rm --link mysql-server mysql mysql -hmysql-server -uroot -padmin123
+
+使得MySQL镜像作为客户端连接非docker实例或者运程实例
+docker run -ti --rm mysql mysql -hbdus-m.dbsit.sfdc.com.cn -ubdus -p3Jwtqrj9yn
+
+通过docker stack或docker-compose运行mysql实例
+容器编排文件：
+versin: '3.1'
+
+services:
+	db:
+		image: mysql
+		command: --default-authentication-plugin=mysql_native_password
+		restart: always
+		ports:
+			- 3306:3306
+		environment:
+			MYSQL_ROOT_PASSWORD: admin123
+
+运行
+docker stack deploy -c stack.yml mysql
+或
+docker-compose -f stack.yml -up
+
+获取mysql容器命令行
+docker exec -ti mysql-server bash
+查看mysql容器日志
+docker logs mysql-server
+
+自定义配置文件
+mysql默认配置文件/etc/mysql/my.cnf,通过!includedir指令包含/etc/mysql/conf.d和/etc/mysql/mysql.conf.d目录
+docker run --name mysql-server -v /my/custom:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag
+
+不使用配置文件自定义配置
+docker run --name mysql-server -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+查看完整的选项列表
+docker run -ti --rm mysql:tag --verbose --help
+
+环境变量
+MYSQL_ROOT_PASSWORD
+强制，root管理员密码
+MYSQL_DATABASE
+指定容器启动时创建的数据库，如果同时指定了用户名/密码，则用户将授予此数据库的所有权限
+MYSQL_USER，MYSQL_PASSWORD
+二者同时使用，指定新建用户的用户名和密码，新增用户将授予MYSQL_DATABASE指定库的超级用户权限
+MYSQL_ALLOW_EMPTY_PASSWORD
+指定root用户使用空密码
+MYSQL_RANDOM_ROOT_PASSWORD
+指定为root用户生成随机密码，生成的随机密码会标准输出中打印出来
+MYSQL_ONETIME_PASSWORD
+指定root密码为一次过期密码，
