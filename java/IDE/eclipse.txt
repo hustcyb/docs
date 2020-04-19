@@ -14,6 +14,7 @@ Windows -> Preferences -> General -> Content Types，选择对应的文件类型
 3. 中文字体设置
 Windows -> Preferences -> General -> Appearance -> Colors and Fonts -> Basic -> 双击Text Font，选择Courier New
 字体列表中可能没有Courier New，点击“加载显示字体”, 在字段列表窗口，选中“Courier New”，右键 -> “显示”
+win 10下，进入C:\Windows\Fonts目录，找到Courier New字段，右键 -> 显示
 
 4. Console取消字符数限制
 Windows -> Preferences -> RUN/DEBUG -> Console, 取消勾选 Limit console output
