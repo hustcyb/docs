@@ -1,0 +1,6 @@
+安装
+1. CTRL + SHIFT + P，选择"Package Control: Install Package"(输入“pcip”可快速定位)，回车，打开Package Control
+2. 输入"InsertNums"，回车进行安装
+
+生成自增序号
+多行编辑模块，CTRL + ALT + N，即可生成自增序列，默认为“1:1”（从1开始，步长为1），可输入“M:N”（从M开始，步长为N)生成自定义序列
