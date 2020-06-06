@@ -1,0 +1,2 @@
+netstat -ano | findstr 8080
+taskkill -PID 14072 -F
