@@ -4,3 +4,6 @@ Edit -> Permute Lines -> Unique
 2. 跳至指定列
 CTRL + P，然后输入
 :{行号}:{列号}
+
+3. Windows换行符转Linux换行符
+菜单：View -> Line Endings -> Unix
