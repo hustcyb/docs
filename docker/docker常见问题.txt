@@ -1,0 +1,6 @@
+1. win 10下运行zookeeper镜像提示“An attempt was made to access a socket in a way forbidden by its access permissions”
+原因1：端口号被其他程序占用
+方法1： netstat -ano | findstr "2181" 找到占用端口号的进程，停止占用进程即可
+方法2： 修改镜像默认端口号
+原因2：Hyper-v占用了默认端口
+解决方法：https://www.cnblogs.com/wilsonsui/p/12719046.html
